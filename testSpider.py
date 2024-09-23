@@ -2,7 +2,7 @@
 Author: kids0cn kids0cn@gmail.com
 Date: 2024-09-14 22:05:50
 LastEditors: kids0cn kids0cn@gmail.com
-LastEditTime: 2024-09-23 21:16:45
+LastEditTime: 2024-09-23 21:32:52
 FilePath: /Spider/testSpider.py
 Description
 
@@ -48,15 +48,19 @@ def get_article(url):
 def get_article(url):
     response = requests.get(url)
     encoding = chardet.detect(response.content)['encoding']
-    print('+++++++++++')
-    print(url)
-    print(encoding)
-    print('+++++++++++')
+    if encoding.lower() == 'gb2312':
+        encoding = 'gbk'
+
+    # print('+++++++++++')
+    # print(url)
+    # print(encoding)
+    # print('+++++++++++')
 
     source = response.content.decode(encoding)
     title = re.findall('size="4"> (.*?)<',source,re.S)[0]
     article = re.search('<p>(.*?)</p>',source,re.S).group(1)
     article = article.replace('<br />','')
+    article = article.replace('&nbsp;','')
     return title,article
 
 
@@ -83,11 +87,13 @@ def query_article(toc):
     title,article = get_article(toc)
     save(title,article)
 
-def check_charset(url):
-    response = requests.get(url)
-    encoding = chardet.detect(response.content)['encoding']
-    print(encoding)
-    return encoding
+# def check_charset(url):
+#     response = requests.get(url)
+#     encoding = chardet.detect(response.content)['encoding']
+#     if encoding.lower() == 'gb2312':
+#         encoding = 'gbk'
+#     print(encoding)
+#     return encoding
 
 if __name__ == '__main__':
     source = input("请输入网址: ")
@@ -95,8 +101,10 @@ if __name__ == '__main__':
         source = "https://www.kanunu8.com/book3/6879/"  # 如果用户没有输入网址，则默认使用
     print(f"使用的网址: {source}")
 
-    response = requests.get(source,verify=False)
+    response = requests.get(source)
     encoding = chardet.detect(response.content)['encoding']
+    if encoding.lower() == 'gb2312':
+        encoding = 'gbk'
     html_toc = response.content.decode(encoding)
     file_dir = re.findall('<title>([^\\s]*)',html_toc,re.S)[0]
     print(f"小说名字: {file_dir}")
@@ -110,9 +118,7 @@ if __name__ == '__main__':
     pool.close()
     pool.join() # 确保子进程完成，
     
-    # # check encoding
-    # url = 'https://www.kanunu8.com/book3/8483/187841.html'
-    # check_charset(url)
+
     
 
 
