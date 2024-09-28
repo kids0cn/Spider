@@ -2,7 +2,7 @@
 Author: kids0cn kids0cn@gmail.com
 Date: 2024-09-26 20:00:04
 LastEditors: kids0cn kids0cn@gmail.com
-LastEditTime: 2024-09-28 12:47:40
+LastEditTime: 2024-09-28 17:13:44
 FilePath: /Spider/10_测试scrapy/baidu/baidu/settings.py
 Description: 
 
@@ -60,9 +60,11 @@ ROBOTSTXT_OBEY = False
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    "baidu.middlewares.BaiduDownloaderMiddleware": 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+   #"baidu.middlewares.BaiduDownloaderMiddleware": 543,
+   #"baidu.middlewares.ProxyMiddleware": 543,
+   "baidu.middlewares.UAMiddleware": 543,
+}
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
@@ -72,10 +74,10 @@ ROBOTSTXT_OBEY = False
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-ITEM_PIPELINES = {
-   "baidu.pipelines.BaiduPipeline": 300,
-   "baidu.pipelines.PersonInfoPipeline": 301,
-}
+# ITEM_PIPELINES = {
+#    "baidu.pipelines.BaiduPipeline": 300,
+#    "baidu.pipelines.PersonInfoPipeline": 301,
+# }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
@@ -103,7 +105,42 @@ REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 FEED_EXPORT_ENCODING = "utf-8"
 
-MONGODB_HOST = "127.0.0.1"
-MONGODB_PORT = 27017
-MONGODB_DBNAME = "baidu"
-MONGODB_DOCNAME = "person_info"
+# MONGODB_HOST = "127.0.0.1"
+# MONGODB_PORT = 27017
+# MONGODB_DBNAME = "baidu"
+# MONGODB_DOCNAME = "person_info"
+
+# # 添加redis调度器
+# # Enables scheduling storing requests queue in redis.
+# SCHEDULER = "scrapy_redis.scheduler.Scheduler"
+# # 可以选择的调度算法，第一个是默认
+# # SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderQueue'
+# # SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderStack'
+# # SCHEDULER_QUEUE_CLASS = 'scrapy_redis.queue.SpiderPriorityQueue'
+
+# # 确保所有爬虫共享相同的重复过滤器，去重
+# # Ensure all spiders share same duplicates filter through redis.
+# DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
+
+# # 不清理redis队列
+# SCHEDULER_PERSIST = False # 默认是True，reds的url使用后不会清除，可以断点继续，否则的话每次重新开始
+
+# # 指定redis连接
+# REDIS_HOST = "127.0.0.1"
+# REDIS_PORT = 6379
+
+# # 指定redis数据库
+# REDIS_DB = 0
+
+
+# # 代理
+# PROXIES = [
+#    'http://202.101.213.82:23649'
+# ]
+
+USER_AGENT_LIST =[
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15',
+     'Mozilla/5.0 (Linux; Android 10; SM-G975F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Mobile Safari/537.36'
+]
+

@@ -1,3 +1,13 @@
+'''
+Author: kids0cn kids0cn@gmail.com
+Date: 2024-09-26 20:00:04
+LastEditors: kids0cn kids0cn@gmail.com
+LastEditTime: 2024-09-28 16:01:11
+FilePath: /Spider/10_测试scrapy/baidu/baidu/middlewares.py
+Description: 
+
+Copyright (c) 2024 by ${git_name_email}, All Rights Reserved. 
+'''
 # Define here the models for your spider middleware
 #
 # See documentation in:
@@ -7,7 +17,7 @@ from scrapy import signals
 
 # useful for handling different item types with a single interface
 from itemadapter import is_item, ItemAdapter
-
+import random
 
 class BaiduSpiderMiddleware:
     # Not all methods need to be defined. If a method is not defined,
@@ -101,3 +111,31 @@ class BaiduDownloaderMiddleware:
 
     def spider_opened(self, spider):
         spider.logger.info("Spider opened: %s" % spider.name)
+
+
+# # 创建一个代理中间件
+# class ProxyMiddleware(object):
+#     def __init__(self,crawler):
+#         self.proxies = crawler.settings.get('PROXIES')
+
+
+#     def process_request(self,request,spider):
+#         proxy = random.choice(self.proxies)
+#         request.meta['proxy'] = proxy
+
+#     @classmethod
+#     def from_crawler(cls,crawler):
+#         return cls(crawler)
+    
+# 创建UA中间件
+class UAMiddleware(object):
+  def __init__(self,crawler):
+    self.ua_list = crawler.settings.get('USER_AGENT_LIST')
+
+  def process_request(self,request,spider):
+    user_agent = random.choice(self.ua_list)
+    request.headers['User-Agent'] = user_agent
+
+  @classmethod
+  def from_crawler(cls,crawler):
+    return cls(crawler)
