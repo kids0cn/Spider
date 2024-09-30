@@ -25,9 +25,15 @@ class TestuamiddleSpider(scrapy.Spider):
                   "http://exercise.kingname.info/exercise_middleware_ua/8",
                   "http://exercise.kingname.info/exercise_middleware_ua/9",
                   "http://exercise.kingname.info/exercise_middleware_ua/10",
-            
+                  "http://exercise.kingname.info/exercise_middleware_ua/11",
+                  
+
                   ]
 
     def parse(self, response):
         user_agent = response.request.headers.get('User-Agent').decode('utf-8')
+        cookie_header = response.request.headers.get('Cookie')
+        user_cookies = cookie_header.decode('utf-8') if cookie_header else 'No Cookies'
         print(f"User-Agent: {user_agent}")
+        print(f"User-Cookies: {user_cookies}")
+
